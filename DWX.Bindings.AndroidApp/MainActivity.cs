@@ -1,31 +1,168 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Android.App;
 using Android.Content;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using DWX.Bindings.Portable;
 
 namespace DWX.Bindings.AndroidApp
 {
     [Activity(Label = "DWX.Bindings.AndroidApp", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
-        int count = 1;
+        private CutenessViewModel ViewModel { get; set; }
+
+        #region Stored UI Elements
+
+        private ProgressBar _progressBar;
+        private Button _refreshButton;
+
+        private KittenAdapater _adapter;
+
+        #endregion
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
-            // Set our view from the "main" layout resource
+            // Get/Create the viewmodel
+            ViewModel = new CutenessViewModel();
+
+            // Load the layout
             SetContentView(Resource.Layout.Main);
 
-            // Get our button from the layout resource,
-            // and attach an event to it
-            Button button = FindViewById<Button>(Resource.Id.MyButton);
+            // Get all controls
+            _progressBar = FindViewById<ProgressBar>(Resource.Id.KittenDownloadProgress);
+            _refreshButton = FindViewById<Button>(Resource.Id.RefreshButton);
 
-            button.Click += delegate { button.Text = string.Format("{0} clicks!", count++); };
+            _refreshButton.Click += _refreshButton_Click;
+
+            var listView = FindViewById<ListView>(Resource.Id.KittenListView);
+            listView.Adapter = _adapter = new KittenAdapater(this);
         }
+
+        private void _refreshButton_Click(object sender, EventArgs e)
+        {
+            var t = ViewModel.RefreshAsync();
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+
+            ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+
+            _Update_All();
+        }
+
+        protected override void OnPause()
+        {
+            base.OnPause();
+
+            ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
+        }
+
+        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "": _Update_All(); break;
+                case nameof(CutenessViewModel.IsDataLoading): _Update_IsDataLoading(); break;
+                case nameof(CutenessViewModel.Kittens): _Update_Kittens(); break;
+                default: break;
+            }
+        }
+
+        #region PropertyChangedHandlers
+
+        private void _Update_All()
+        {
+            _Update_IsDataLoading();
+            _Update_Kittens();
+        }
+
+        private void _Update_IsDataLoading()
+        {
+            _progressBar.Visibility = ViewModel.IsDataLoading ? ViewStates.Visible : ViewStates.Gone;
+            _refreshButton.Enabled = !ViewModel.IsDataLoading;
+        }
+
+        private void _Update_Kittens()
+        {
+            _adapter.Kittens = ViewModel.Kittens.ToList();
+        }
+
+        #endregion
+
+        #region ListViewAdapter
+
+        public class KittenAdapater : BaseAdapter<Kitten>
+        {
+            private readonly Activity _context;
+            private List<Kitten> _kittens = new List<Kitten>();
+
+            public KittenAdapater(Activity context)
+            {
+                _context = context;
+            }
+
+            public override Kitten this[int position]
+            {
+                get
+                {
+                    return _kittens[position];
+                }
+            }
+
+            public override int Count
+            {
+                get
+                {
+                    return _kittens.Count;
+                }
+            }
+
+            public override long GetItemId(int position)
+            {
+                return position;
+            }
+
+            public override View GetView(int position, View convertView, ViewGroup parent)
+            {
+                if (convertView == null)
+                {
+                    convertView = _context.LayoutInflater.Inflate(Resource.Layout.CutenessCellLayout, parent, false);
+                }
+
+                var item = this[position];
+
+                var image = convertView.FindViewById<ImageView>(Resource.Id.KittenCellImage);
+                var text = convertView.FindViewById<TextView>(Resource.Id.KittenCellText);
+
+                text.Text = item.CutenesDescription;
+
+                return convertView;
+            }
+
+            public List<Kitten> Kittens
+            {
+                get { return _kittens; }
+                set
+                {
+                    if (_kittens != value)
+                    {
+                        _kittens = value;
+                        NotifyDataSetChanged();
+                    }
+                }
+            }
+        }
+
+        #endregion
     }
 }
 

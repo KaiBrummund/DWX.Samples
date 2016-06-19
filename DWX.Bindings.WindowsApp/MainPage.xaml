@@ -5,9 +5,23 @@
     xmlns:local="using:DWX.Bindings.WindowsApp"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pcl="using:DWX.Bindings.Portable"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <ProgressBar IsIndeterminate="{x:Bind ViewModel.IsDataLoading, Mode=OneWay}" VerticalAlignment="Top" />
 
+        <ListView ItemsSource="{x:Bind ViewModel.Kittens, Mode=OneWay}">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="pcl:Kitten">
+                    <StackPanel>
+                        <Image Source="{x:Bind ImageUrl}" Width="200" Height="200" />
+                        <TextBlock Text="{x:Bind CutenesDescription}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        
+        <Button Click="{x:Bind ViewModel.RefreshAsync}" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">Refresh Kittens</Button>
     </Grid>
 </Page>

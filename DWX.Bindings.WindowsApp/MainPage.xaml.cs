@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DWX.Bindings.Portable;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,8 +23,12 @@ namespace DWX.Bindings.WindowsApp
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        public CutenessViewModel ViewModel { get; set; }
+
         public MainPage()
         {
+            ViewModel = new CutenessViewModel();
+
             this.InitializeComponent();
         }
     }
