@@ -8,6 +8,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using DWX.Bindings.Portable;
+using DWX.Bindings.AndroidApp.Common;
 
 namespace DWX.Bindings.AndroidApp
 {
@@ -149,7 +150,9 @@ namespace DWX.Bindings.AndroidApp
                 var image = convertView.FindViewById<ImageView>(Resource.Id.KittenCellImage);
                 var text = convertView.FindViewById<TextView>(Resource.Id.KittenCellText);
 
-                text.Text = item.CutenesDescription;
+                text.Text = item.CutenessDescription;
+
+                DrawableManager.Instance.FetchDrawableOnThread(item.ImageUrl, image);
 
                 return convertView;
             }
