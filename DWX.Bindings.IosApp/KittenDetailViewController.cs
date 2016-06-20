@@ -18,7 +18,7 @@ namespace DWX.Bindings.IosApp
         {
             base.ViewDidLoad();
             imgKittenDetail.ClipsToBounds = true;
-            imgKittenDetail.SetImage(new NSUrl(Kitten.ImageUrl));
+            imgKittenDetail.SetImage(new NSUrl(Kitten.ImageUrl), UIImage.FromBundle("kitten_placeholder.png"));
             lblCutenessDescription.Text = Kitten.CutenessDescription;
         }
     }
