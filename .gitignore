@@ -243,3 +243,15 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+#Xamarin
+Components
+packages
+Resource.designer.cs
+
+*.pidb
+*.userprefs
+*.swp
+*.nib
+*.user
+*.pfx
