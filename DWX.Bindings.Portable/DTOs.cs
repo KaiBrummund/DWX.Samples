@@ -10,8 +10,8 @@ namespace DWX.Bindings.Portable
     public class Kitten
     {
         public string ImageUrl { get; set; }
-        public string CutenesDescription { get; set; }
-        public int CutenesFactor { get; set; }
+        public string CutenessDescription { get; set; }
+        public int CutenessFactor { get; set; }
     }
 
 }
