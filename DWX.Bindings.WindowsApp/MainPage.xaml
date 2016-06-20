@@ -16,7 +16,7 @@
                 <DataTemplate x:DataType="pcl:Kitten">
                     <StackPanel>
                         <Image Source="{x:Bind ImageUrl}" Width="200" Height="200" />
-                        <TextBlock Text="{x:Bind CutenesDescription}" />
+                        <TextBlock Text="{x:Bind CutenessDescription}" />
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
