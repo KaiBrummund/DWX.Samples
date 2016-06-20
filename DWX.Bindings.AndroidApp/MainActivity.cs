@@ -39,15 +39,10 @@ namespace DWX.Bindings.AndroidApp
             _progressBar = FindViewById<ProgressBar>(Resource.Id.KittenDownloadProgress);
             _refreshButton = FindViewById<Button>(Resource.Id.RefreshButton);
 
-            _refreshButton.Click += _refreshButton_Click;
+            _refreshButton.Click += (o, e) => { var t = ViewModel.RefreshAsync(); };
 
             var listView = FindViewById<ListView>(Resource.Id.KittenListView);
             listView.Adapter = _adapter = new KittenAdapater(this);
-        }
-
-        private void _refreshButton_Click(object sender, EventArgs e)
-        {
-            var t = ViewModel.RefreshAsync();
         }
 
         protected override void OnResume()
