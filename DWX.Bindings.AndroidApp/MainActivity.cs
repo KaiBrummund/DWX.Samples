@@ -63,12 +63,23 @@ namespace DWX.Bindings.AndroidApp
 
         private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            switch (e.PropertyName)
+            if (String.IsNullOrEmpty(e.PropertyName))
             {
-                case "": _Update_All(); break;
-                case nameof(CutenessViewModel.IsDataLoading): _Update_IsDataLoading(); break;
-                case nameof(CutenessViewModel.Kittens): _Update_Kittens(); break;
-                default: break;
+                _Update_All();
+            }
+            else
+            {
+                switch (e.PropertyName)
+                {
+                    case nameof(CutenessViewModel.IsDataLoading):
+                        _Update_IsDataLoading();
+                        break;
+                    case nameof(CutenessViewModel.Kittens):
+                        _Update_Kittens();
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
