@@ -37,8 +37,8 @@ namespace DWX.Bindings.AndroidApp
             SetContentView(Resource.Layout.Main);
 
             // Get all controls
-            _progressBar = FindViewById<ProgressBar>(Resource.Id.KittenDownloadProgress);
             _refreshButton = FindViewById<Button>(Resource.Id.RefreshButton);
+            _progressBar = FindViewById<ProgressBar>(Resource.Id.KittenDownloadProgress);
 
             _refreshButton.Click += (o, e) => { var t = ViewModel.RefreshAsync(); };
 
@@ -51,8 +51,6 @@ namespace DWX.Bindings.AndroidApp
             base.OnResume();
 
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
-
-            _Update_All();
         }
 
         protected override void OnPause()
@@ -80,6 +78,7 @@ namespace DWX.Bindings.AndroidApp
                         break;
                     default:
                         break;
+
                 }
             }
         }
