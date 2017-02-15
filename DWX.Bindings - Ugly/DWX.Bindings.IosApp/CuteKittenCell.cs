@@ -3,6 +3,7 @@ using System;
 using UIKit;
 using DWX.Bindings.Portable;
 using System.Net;
+using SDWebImage;
 
 namespace DWX.Bindings.IosApp
 {
@@ -15,18 +16,20 @@ namespace DWX.Bindings.IosApp
         public override void AwakeFromNib()
         {
             base.AwakeFromNib();
+
+            imgKittenPreview.ClipsToBounds = true;
         }
 
         public void UpdateCell(Kitten kitten)
         {
-            var webClient = new WebClient();
-            webClient.DownloadDataCompleted += (s, e) =>
-            {
-                var bytes = e.Result;
-                imgKittenPreview.Image = UIImage.LoadFromData(NSData.FromArray(bytes));
-            };
-            webClient.DownloadDataAsync(new Uri(kitten.ImageUrl));
+            imgKittenPreview.SetImage(new NSUrl(kitten.ImageUrl), UIImage.FromBundle("kitten_placeholder.png"));
             lblCutenesDescription.Text = kitten.CutenessDescription;
+        }
+
+        public override void PrepareForReuse()
+        {
+            base.PrepareForReuse();
+            imgKittenPreview.Image = null;
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using UIKit;
 using DWX.Bindings.Portable;
 using System.Net;
+using SDWebImage;
 
 namespace DWX.Bindings.IosApp
 {
@@ -20,14 +21,7 @@ namespace DWX.Bindings.IosApp
 
             lblCutenessDescription.Text = Kitten.CutenessDescription;
 
-            imgKittenDetail.ClipsToBounds = true;
-            var webClient = new WebClient();
-            webClient.DownloadDataCompleted += (s, e) =>
-            {
-                var bytes = e.Result;
-                imgKittenDetail.Image = UIImage.LoadFromData(NSData.FromArray(bytes));
-            };
-            webClient.DownloadDataAsync(new Uri(Kitten.ImageUrl));
+            imgKittenDetail.SetImage(new NSUrl(Kitten.ImageUrl));
         }
     }
 }

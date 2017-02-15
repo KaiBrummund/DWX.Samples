@@ -7,8 +7,7 @@ namespace DWX.Bindings.IosApp
 {
     public partial class KittenOverviewViewController : UITableViewController
     {
-        private const string CellIdentifier = "CuteKittenCell";
-
+       
         private CutenessViewModel ViewModel { get; set; }
 
         public KittenOverviewViewController (IntPtr handle) : base (handle)
@@ -39,7 +38,7 @@ namespace DWX.Bindings.IosApp
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            var cell = (CuteKittenCell)tableView.DequeueReusableCell(CellIdentifier);
+            var cell = (CuteKittenCell)tableView.DequeueReusableCell(nameof(CuteKittenCell));
             cell.UpdateCell(ViewModel.Kittens[indexPath.Row]);
             return cell;
         }
